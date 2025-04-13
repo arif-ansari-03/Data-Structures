@@ -2,10 +2,87 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-// this heap is specifically made for Dijkstra's algorithm
-// this heap has logn insertion and extract_min
-// it also has update_dist in logn time, same time as insertion
+int heap;
 
+struct heap_elem
+{
+    int a;
+    heap_elem(int b)
+    {
+        a = b;
+    }
+};
+
+int heap_elem_cmp(struct heap_elem a, struct heap_elem b)
+{
+    if (a.a < b.a) return -1;
+    if (a.a == b.a) return 0;
+    return 1;
+}
+
+struct Heap
+{
+    int N;
+    struct heap_elem* heap;
+    int MAX;
+    
+    void init(int n)
+    {
+        N = 0;
+        heap = malloc(sizeof(struct heap_elem) * n);
+        MAX = -1;
+    }
+
+    void insert(struct heap_elem a)
+    {
+        heap[N] = a;
+        int i = N++;
+
+        while (i > 0)
+        {
+            int p = (i-1)/2;
+            if (heap_elem_cmp(heap[p], heap[i]) == MAX) break;
+            struct heap_elem t = heap[p];
+            heap[p] = heap[i];
+            heap[i] = t;
+            i = p;
+        }
+    }
+
+    struct heap_elem extract()
+    {
+        if (N <= 0)
+        {
+            printf("Heap empty\n");
+            exit(-1);
+        }
+
+        heap_elem ret_val = heap[0];
+        heap[0] = heap[--N];
+
+        int i = 0;
+        while (1)
+        {
+            int j1 = 2*i+1, j2 = 2*i+2;
+            if (j1 >= N) break;
+            if (j2 < N)
+            {
+                if (heap_elem_cmp(heap[j1], heap[j2]) != MAX)
+                {
+                    int t = j1;
+                    j1 = j2;
+                    j2 = t;
+                }
+            }
+            struct heap_elem t = heap[i];
+            heap[i] = heap[j1];
+            heap[j1] = t;
+            i = j1;
+        }
+    }
+};
+
+/*
 struct Heap
 {
     int* heap;
@@ -99,9 +176,11 @@ struct Heap
         else bubble_down(u);
     }
 };
+*/
 
 int main()
 {
-
+    struct Heap H;
+    H.insert(4);
 
 }

@@ -127,3 +127,11 @@ void prtSkipList(Qptr Q)
         Q = Q -> down;
     }
 }
+
+void init_skiplist(Qptr &Q)
+{
+    Q = new Quad(-INF);
+    Q -> right = new Quad(INF);
+    Q -> right -> left = Q;
+    Q -> end = Q -> right -> end = Q -> right;
+}

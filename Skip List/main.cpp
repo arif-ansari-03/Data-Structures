@@ -12,11 +12,7 @@ int main()
     srand(rand());
 
     Qptr Q = new Quad(-INF);
-    Q -> right = new Quad(INF);
-    Q -> right -> left = Q;
-    Q -> end = Q -> right -> end = Q -> right;
-
-    // prtSkipList(Q);
+    init_skiplist(Q);
 
     for (int i = 1; i <= 7; i++) insert(Q, i);
 
